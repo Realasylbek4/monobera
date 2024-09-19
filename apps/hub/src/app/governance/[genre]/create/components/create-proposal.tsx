@@ -7,32 +7,55 @@ import {
   CustomProposalActionErrors,
   CustomProposalErrors,
   ProposalAction,
-  ProposalErrorCodes,
-  ProposalTypeEnum,
 } from "~/app/governance/types";
-import {
-  checkProposalField,
-  getBodyErrors,
-  useCreateProposal,
-} from "~/hooks/useCreateProposal";
+import { getBodyErrors, useCreateProposal } from "~/hooks/useCreateProposal";
 import { CreateProposalAction } from "./create-proposal-action";
-import { Address, isAddress, parseAbiItem } from "viem";
+import { Address } from "viem";
 import { ActionButton } from "@bera/shared-ui";
 import { Tabs } from "./tabs";
 import { Icons } from "@bera/ui/icons";
+import { useInterval } from "@bera/berajs";
+
+const PROPOSAL_LOCALSTORAGE_KEY = "governance-proposal";
 
 export const CreateProposal = ({
   governorAddress,
 }: {
   governorAddress: Address;
 }) => {
+  let initialData;
+
+  try {
+    initialData =
+      typeof window !== "undefined"
+        ? JSON.parse(
+            window.localStorage.getItem(PROPOSAL_LOCALSTORAGE_KEY) || "{}",
+          )
+        : {};
+  } catch (error) {}
+
   const {
     proposal,
     setProposal,
     addProposalAction,
     removeProposalAction,
     submitProposal,
-  } = useCreateProposal(governorAddress);
+  } = useCreateProposal({
+    governorAddress,
+    initialData,
+    onSuccess() {
+      localStorage.removeItem(PROPOSAL_LOCALSTORAGE_KEY);
+    },
+  });
+
+  const saveToLocalStorage = useCallback(
+    () =>
+      localStorage.setItem(PROPOSAL_LOCALSTORAGE_KEY, JSON.stringify(proposal)),
+    [proposal],
+  );
+
+  useInterval(saveToLocalStorage, 1000);
+
   const [activeTab, setActiveTab] = useState(0);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: null,

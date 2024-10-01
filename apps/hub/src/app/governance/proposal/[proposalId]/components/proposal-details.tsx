@@ -16,7 +16,6 @@ import { Actions } from "../Actions";
 import { StatusAction } from "../Status";
 import "@bera/graphql";
 import MarkdownRenderer from "./markdown-renderer";
-import { Badge } from "@bera/ui/badge";
 import { OverviewChart } from "../../../[genre]/components/overview-chart";
 import { VoterTable } from "../../../[genre]/components/voter-table";
 import { VoteCard } from "../../../[genre]/components/vote-card";
@@ -166,7 +165,7 @@ export default function ProposalDetails({
                 <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4 md:gap-6">
                   <div className="border border-border p-4 px-8 rounded-md">
                     <h3 className="font-medium mb-4">Description</h3>
-                    <div>
+                    <div className="prose prose-sm prose-neutral prose-invert">
                       <MarkdownRenderer content={fm.content} />
                     </div>
                   </div>

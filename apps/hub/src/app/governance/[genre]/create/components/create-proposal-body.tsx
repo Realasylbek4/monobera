@@ -1,8 +1,7 @@
 import { Button } from "@bera/ui/button";
 
-import { Icons } from "@bera/ui/icons";
 import { Input, InputWithLabel } from "@bera/ui/input";
-import { TextArea } from "@bera/ui/text-area";
+
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import {
   CustomProposal,
@@ -14,6 +13,9 @@ import {
   getBodyErrors,
   type useCreateProposal,
 } from "~/hooks/useCreateProposal";
+import { MDXEditor } from "./mdx-editor";
+import { Label } from "@bera/ui/label";
+import { FormError } from "@bera/ui/form-error";
 
 export const CreateProposalBody = ({
   proposal,
@@ -66,25 +68,29 @@ export const CreateProposalBody = ({
         }
       />
 
-      <TextArea
-        id="proposal-message"
-        label="Description"
-        error={
-          errors.description === ProposalErrorCodes.REQUIRED
-            ? "Description must be filled"
-            : errors.description
-        }
-        variant="black"
-        placeholder="Tell us about your proposal"
-        value={proposal.description}
-        onChange={(e) =>
-          setProposal((prev: any) => ({
-            ...prev,
-            description: e.target.value,
-          }))
-        }
-      />
+      <div className="grid grid-cols-1 gap-y-2">
+        <Label>Description</Label>
 
+        <MDXEditor
+          className="dark-theme dark-editor border border-border h-32 overflow-y-scroll rounded-md placeholder:text-sm"
+          contentEditableClassName="placeholder:text-sm"
+          markdown={proposal.description}
+          placeholder="Tell us about your proposal"
+          onChange={(e) => {
+            console.log("e", e);
+            setProposal((prev: any) => ({
+              ...prev,
+              description: e,
+            }));
+          }}
+        />
+
+        <FormError>
+          {errors.description === ProposalErrorCodes.REQUIRED
+            ? "Description must be filled"
+            : errors.description}
+        </FormError>
+      </div>
       <InputWithLabel
         label="Forum Link"
         error={

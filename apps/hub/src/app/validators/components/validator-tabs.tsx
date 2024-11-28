@@ -17,7 +17,8 @@ import { ValidatorEvents } from "./validator-events";
 
 export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
   const { account } = useBeraJs();
-  const isValidatorWallet = account === validator.coinbase;
+  const isValidatorWallet =
+    account?.toLowerCase() === validator.coinbase.toLowerCase();
   const [dayRange, setDayRange] = useState("30");
 
   return (
@@ -25,10 +26,9 @@ export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
       <div className="mb-6 flex w-full flex-col justify-between gap-6 sm:flex-row">
         <TabsList variant="ghost">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          {/* TODO: Uncomment this when we have a working contract for configuration */}
-          {/* {isValidatorWallet && (
+          {isValidatorWallet && (
             <TabsTrigger value="configuration">Configuration</TabsTrigger>
-          )} */}
+          )}
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           {/* <TabsTrigger value="events">Events</TabsTrigger> */}
         </TabsList>

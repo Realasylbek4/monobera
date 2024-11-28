@@ -1,10 +1,10 @@
+import { type GetGaugesQuery } from "@bera/graphql/pol";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 
 import { getGaugesData } from "~/actions/pol";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
-import { type GetGaugesQuery } from "@bera/graphql/pol";
 
 export const usePollGaugesData = (
   options?: DefaultHookOptions,

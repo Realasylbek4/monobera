@@ -13,7 +13,6 @@ export const ValidatorConfiguration = ({
   validatorAddress: Address;
 }) => {
   const [operatorAddress, setOperatorAddress] = useState<string>("");
-  const [commission, setCommission] = useState<string>("0");
 
   const handleSaveSettings = useCallback(() => {
     console.log("changing settings", validatorAddress);
@@ -25,13 +24,8 @@ export const ValidatorConfiguration = ({
 
   return (
     <div className="mt-10 flex flex-col gap-6">
-      <Card className="flex flex-col gap-1 p-4">
-        <span className="text-2xl font-bold">Berachef Weight</span>
-        <span className="text-sm text-muted-foreground">
-          Configure your reward vaults distribution weighting
-        </span>
-        <CuttingBoardConfiguration />
-      </Card>
+      <CuttingBoardConfiguration />
+
       <Card className="flex flex-col gap-1 p-4">
         <span className="text-2xl font-bold">General Settings</span>
         <span className="text-sm text-muted-foreground">
@@ -44,13 +38,7 @@ export const ValidatorConfiguration = ({
           value={operatorAddress}
           onChange={(e) => setOperatorAddress(e.target.value)}
         />
-        <span className="mt-2 flex font-semibold">Commission</span>
-        <Input
-          type="input"
-          className="w-[300px]"
-          value={commission}
-          onChange={(e) => setCommission(e.target.value)}
-        />
+
         <div className="my-4 border-b border-border" />
         <Button
           className="flex w-[100px] self-end border border-border p-2"

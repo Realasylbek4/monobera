@@ -43,9 +43,9 @@ const PoolTypeSelector: React.FC<PoolTypeSelectorProps> = ({
           </span>
         </Card>
         <Card
-          onClick={() => {}} // Disabled for now
+          onClick={() => onPoolTypeChange(PoolType.MetaStable)}
           className={cn(
-            "flex w-full cursor-not-allowed flex-col gap-0 border border-border p-4 opacity-50",
+            "flex w-full cursor-pointer flex-col gap-0 border border-border p-4",
             poolType === PoolType.MetaStable && "border-info-foreground ",
           )}
         >

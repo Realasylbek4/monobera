@@ -339,7 +339,6 @@ export default function CreatePageContent() {
                 index={index}
                 onTokenSelection={(selectedToken) => {
                   if (selectedToken) {
-                    // FIXME: how is this needing to be handled??
                     handlePoolTokenChange(index, selectedToken);
                   }
                 }}

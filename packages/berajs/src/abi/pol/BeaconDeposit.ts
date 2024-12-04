@@ -1,4 +1,4 @@
-export const beacon = [
+export const beaconDepositAbi = [
   { inputs: [], type: "error", name: "AlreadyInitialized" },
   { inputs: [], type: "error", name: "AmountLessThanMinIncentiveRate" },
   { inputs: [], type: "error", name: "CannotRecoverIncentiveToken" },

@@ -56,12 +56,7 @@ Monobera requires node 18.18.2+.
 | `pnpm build:perp`        | Builds only the `Berps` and related packages.                                                            |
 | `pnpm build:berajs-docs` | Builds only the `Berajs Docs` and related packages.                                                      |
 | `pnpm build:pkg`         | Builds all packages.                                                                                     |
-| `pnpm dev`               | Runs all packages and apps in dev mode. Not recommended as it takes large amounts of memory              |
-| `pnpm dev:hub`           | Runs `Hub` and related packages in dev mode.                                                             |
-| `pnpm dev:honey`         | Runs `Honey` and related packages in dev mode.                                                           |
-| `pnpm dev:lend`          | Runs `Bend` and related packages in dev mode.                                                            |
-| `pnpm dev:perp`          | Runs `Berps` and related packages in dev mode.                                                           |
-| `pnpm dev:berajs-docs`   | Runs `Berajs Docs` and related packages in dev mode.                                                     |
+| `pnpm dev:pkg`           | Runs all packages in dev mode.                                                                           |
 | `pnpm clean`             | Cleans the project using turbo clean and removes untracked files with git clean, including node_modules. |
 | `pnpm pullenv`           | Pulls production environment variables from Vercel. Requires Vercel Login                                |
 | `pnpm check-types`       | Runs type-checking across all apps and packages.                                                         |

@@ -21,12 +21,14 @@ export const AllValidator = ({
   keyword,
   isTyping,
   onRowClick,
+  onRowHover,
   page,
   setPage,
 }: {
   keyword?: any;
   isTyping?: boolean;
   onRowClick?: any;
+  onRowHover?: any;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }) => {
@@ -125,6 +127,7 @@ export const AllValidator = ({
       wrapperClassName="min-h-[614px]"
       variant="ghost"
       onRowClick={onRowClick}
+      onRowHover={onRowHover}
       mutedBackgroundOnHead={false}
     />
   );

@@ -17,7 +17,7 @@ export const usePollProposal = (
   const { config: beraConfig } = useBeraJs();
   const publicClient = usePublicClient();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["usePollProposal", proposalId];
+  const QUERY_KEY = proposalId ? ["usePollProposal", proposalId] : null;
 
   const swrResponse = useSWR<ProposalWithVotesFragment>(
     QUERY_KEY,
@@ -28,8 +28,6 @@ export const usePollProposal = (
       refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
     },
   );
-
-  const proposal = swrResponse.data;
 
   // const votes = swrResponse.data?.votes.nodes ?? [];
   return {

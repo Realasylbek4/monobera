@@ -30,7 +30,7 @@ export const usePollHoneyPreview = (
       : HoneyPreviewMethod.HoneyToRedeem;
 
   const QUERY_KEY =
-    collateral && amount && given_in
+    collateral && Number(amount) && given_in
       ? [method, collateral?.address, amount, mint, given_in]
       : null;
   const { config: beraConfig } = useBeraJs();

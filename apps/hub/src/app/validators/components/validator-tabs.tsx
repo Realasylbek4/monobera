@@ -17,7 +17,8 @@ import { ValidatorEvents } from "./validator-events";
 
 export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
   const { account } = useBeraJs();
-  const isValidatorWallet = account === validator.coinbase;
+  const isValidatorWallet =
+    account?.toLowerCase() === validator.operator.toLowerCase();
   const [dayRange, setDayRange] = useState("30");
 
   return (

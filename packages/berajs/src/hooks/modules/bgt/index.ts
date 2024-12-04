@@ -16,3 +16,5 @@ export { useClaimableFees } from "./useClaimableFees";
 export * from "./useBgtInflation";
 export * from "./useIsFriendOfTheChef";
 export * from "./useRewardVault";
+export * from "./useValidator";
+export * from "./useOnChainValidator";

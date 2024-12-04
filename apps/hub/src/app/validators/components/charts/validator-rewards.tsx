@@ -66,6 +66,7 @@ export const ValidatorRewards = ({
   const formattedData = useMemo(
     () =>
       formatValidatorRewardsData(
+        // @ts-expect-error TODOO
         data?.blockRewardStatsByValidators ?? [],
         dayRange,
       ),

@@ -12,7 +12,7 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
-
+import { useBlockNumber } from "wagmi";
 import { type ActiveIncentiveWithVault } from "~/types/validators";
 // import Uptime from "../components/charts/validator-uptime";
 import { UserDelegation } from "./user-delegation";
@@ -44,10 +44,10 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   const activeIncentivesArray: ActiveIncentiveWithVault[] =
     getActiveIncentivesArray(validator);
 
+  const { data: totalBlocks = 0 } = useBlockNumber();
   const { data, isLoading } = usePollValidatorBlockStats(validator.id);
   const blocksSigned =
-    data?.blockStatsByValidators?.[0]?.allTimeblockCount ?? 0;
-  const totalBlocks = data?.blockStats_collection?.[0]?.allTimeblockCount ?? 0;
+    data?.blockStatsByValidators?.[0]?.allTimeBlockCount ?? 0;
   const {
     data: allValidatorBlockData,
     isLoading: isLoadingAllValidatorBlockData,
@@ -58,7 +58,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   const totalValidators = allValidators?.validators?.length ?? 0;
   let valStakedRanking = -1;
   allValidators?.validators?.find((v, index: number) => {
-    if (v.coinbase === validator.coinbase.toLowerCase()) {
+    if (v.id === validator.coinbase.toLowerCase()) {
       valStakedRanking = index + 1;
       return true;
     }
@@ -67,7 +67,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
 
   let valSignedRanking = -1;
   allValidatorBlockData?.blockStatsByValidators?.find((v, index: number) => {
-    if (v.validator.coinbase === validator.coinbase.toLowerCase()) {
+    if (v.validator.publicKey === validator.coinbase.toLowerCase()) {
       valSignedRanking = index + 1;
       return true;
     }
@@ -92,6 +92,8 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
     },
     0,
   );
+
+  console.log({ totalBlocks });
 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
@@ -147,7 +149,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
                   <Skeleton className="mt-1 h-4 w-full" />
                 ) : (
                   <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
-                    {`Signed: ${blocksSigned} / ${totalBlocks}`}
+                    {`Signed: ${blocksSigned} / ${Number(totalBlocks)}`}
                   </span>
                 )}
               </div>
@@ -191,7 +193,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
         {/* TODO: Uptime need work on beaconkit to add */}
         {/* <Uptime address={validator.id} /> */}
       </div>
-      <UserDelegation validator={validator.id} />
+      <UserDelegation validator={validator.coinbase} />
     </div>
   );
 };

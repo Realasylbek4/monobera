@@ -32,7 +32,7 @@ export default function Page({
     notFound();
   }
 
-  return <Validator {...{ validatorAddress }} />;
+  return <Validator validatorAddress={validatorAddress} />;
 }
 
 export function generateStaticParams() {

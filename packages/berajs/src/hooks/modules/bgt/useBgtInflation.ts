@@ -35,7 +35,7 @@ export const useBgtInflation = (
           },
         )
         .then((res) => {
-          const weeklyInflationArray = res.data.globalIncentivesUsages.map(
+          const weeklyInflationArray = res.data.globalRewardDistributions.map(
             (usage) => usage.BGTDistributed,
           );
           const avgDailyInflation =

@@ -13,7 +13,7 @@ import { Icons } from "@bera/ui/icons";
 export default function ValidatorDetails({
   validator,
 }: {
-  validator: Validator;
+  validator: Validator | undefined;
 }) {
   const validatorDataItems = [
     {
@@ -21,7 +21,7 @@ export default function ValidatorDetails({
       value: (
         <div className="text-xl font-semibold">
           <FormattedNumber
-            value={(validator.apy ?? 0) / 10000}
+            value={(validator?.apy ?? 0) / 10000}
             showIsSmallerThanMin
             percent
           />
@@ -34,7 +34,7 @@ export default function ValidatorDetails({
       value: (
         <span className="text-xl font-semibold">
           <FormattedNumber
-            value={validator.amountStaked ?? "0"}
+            value={validator?.amountStaked ?? "0"}
             showIsSmallerThanMin
             symbol="BGT"
           />
@@ -57,7 +57,7 @@ export default function ValidatorDetails({
       value: (
         <FormattedNumber
           className="text-xl font-semibold"
-          value={validator.commission ?? 0}
+          value={validator?.commission ?? 0}
           showIsSmallerThanMin
           percent
         />
@@ -68,8 +68,8 @@ export default function ValidatorDetails({
       title: "Website",
       value: (
         <span className="text-ellipsis text-xl font-semibold hover:underline">
-          <Link href={validator.metadata?.website ?? ""}>
-            {validator.metadata?.website ?? ""}
+          <Link href={validator?.metadata?.website ?? ""}>
+            {validator?.metadata?.website ?? ""}
           </Link>
         </span>
       ),
@@ -90,24 +90,24 @@ export default function ValidatorDetails({
         <div className="items-left w-full flex-col justify-evenly gap-4">
           <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
             <ValidatorIcon
-              address={validator.id}
+              address={validator?.id}
               className="h-12 w-12"
-              imgOverride={validator.metadata?.logoURI}
+              imgOverride={validator?.metadata?.logoURI}
             />
-            {validator.metadata?.name ?? truncateHash(validator.id ?? "")}
+            {validator?.metadata?.name ?? truncateHash(validator?.id ?? "")}
           </div>
           <div className="my-4 flex w-full flex-row gap-1 text-muted-foreground">
             Hex Address:
             <span className="flex flex-row gap-1 text-foreground hover:underline">
-              <Link href={`${blockExplorerUrl}/address/${validator.id}`}>
-                {truncateHash(validator.id ?? "")}
+              <Link href={`${blockExplorerUrl}/address/${validator?.id}`}>
+                {truncateHash(validator?.id ?? "")}
               </Link>
               <Icons.externalLink className="h-4 w-4 self-center" />
             </span>
           </div>
 
           <div className="w-full overflow-hidden text-ellipsis text-foreground">
-            {validator.metadata?.Description ?? ""}
+            {validator?.metadata?.Description ?? ""}
           </div>
         </div>
         <div className="items-left w-full flex-col justify-between gap-4">

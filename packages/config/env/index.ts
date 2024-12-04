@@ -170,6 +170,8 @@ export const beraChefAddress = process.env
   .NEXT_PUBLIC_BERA_CHEF_ADDRESS as Address;
 export const rewardVaultFactoryAddress = process.env
   .NEXT_PUBLIC_REWARD_VAULT_FACTORY_ADDRESS as Address;
+export const depositContractAddress = process.env
+  .NEXT_PUBLIC_DEPOSIT_CONTRACT_ADDRESS as Address;
 
 // Governance
 export const governorAddress = process.env
@@ -178,6 +180,11 @@ export const governanceTokenAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_TOKEN_ADDRESS as Address;
 export const governanceTimelockAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_TIMELOCK_ADDRESS as Address;
+/**
+ * If true, governance is successful if quorum was reached despite the voting period
+ */
+export const governanceAccelerateProposal = process.env
+  .NEXT_PUBLIC_GOVERNANCE_ACCELERATE_PROPOSAL as Address;
 
 // Balancer
 export const balancerVaultAddress = process.env

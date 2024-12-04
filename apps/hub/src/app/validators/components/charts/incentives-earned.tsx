@@ -27,7 +27,7 @@ const CustomTooltip = ({ active, payload }: any) => {
             id: string;
             name: string;
             symbol: string;
-            tokenRewarded: string;
+            tokenReceived: string;
             usdValueTokenRewarded: string;
           }) => {
             return (
@@ -43,7 +43,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 
                 <div className="flex w-full justify-between gap-6">
                   <FormattedNumber
-                    value={token.tokenRewarded}
+                    value={token.tokenReceived}
                     className="flex-start flex text-sm text-muted-foreground"
                   />
                   <FormattedNumber
@@ -116,6 +116,8 @@ export const IncentivesEarned = ({
     },
   });
 
+  const rewardsDistributed = data?.validatorRewardsDistributeds.at(0);
+
   return (
     <div className="flex flex-col lg:flex-row">
       <div className="flex flex-1 flex-col gap-4 p-4">
@@ -125,7 +127,7 @@ export const IncentivesEarned = ({
             <FormattedNumber
               value={
                 // @ts-expect-error
-                data?.validatorUsages.at(0)?.allTimeUsdValueTokenRewarded ?? ""
+                rewardsDistributed?.allTimeUsdValueTokenRewarded ?? ""
               }
               prefixText="Total: $"
               className="text-sm text-muted-foreground"

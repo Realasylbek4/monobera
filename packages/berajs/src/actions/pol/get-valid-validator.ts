@@ -28,7 +28,7 @@ export const getValidValidator = async ({
       variables: { address: address.toLowerCase() },
     });
 
-    if (isAddress(result?.data?.validator?.coinbase)) {
+    if (isAddress(result?.data?.validator?.id)) {
       return true;
     }
     return false;

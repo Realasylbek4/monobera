@@ -15,7 +15,10 @@ export const getValidatorBgtStaked = async ({
   daysRange,
 }: {
   config: BeraConfig;
-  address: Address;
+  /**
+   * Validator pubkey
+   */
+  address: string;
   daysRange: number;
 }): Promise<GetValidatorBgtStakedQuery | undefined> => {
   try {
@@ -29,7 +32,7 @@ export const getValidatorBgtStaked = async ({
     >({
       query: GetValidatorBgtStaked,
       variables: {
-        address: address.toLowerCase(),
+        pubKey: address.toLowerCase(),
         timestamp: formatDaysToTimestamps(daysRange),
       },
     });

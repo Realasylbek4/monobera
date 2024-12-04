@@ -1,8 +1,10 @@
 export * from "./pol/bgt";
 export * from "./pol/reward-vault-factory";
 export * from "./pol/reward-vault";
+export * from "./pol/BeaconDeposit";
 export * from "./pol/beraChef";
 export * from "./pol/bgtStaker";
+
 export * from "./governance/governance";
 export * from "./governance/governance-timelock";
 export * from "./honey/collateralVault";

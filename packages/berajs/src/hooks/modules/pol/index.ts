@@ -13,3 +13,4 @@ export { useValidValidator } from "./hooks/poll-valid-validator";
 export * from "./hooks/useRewardVaultBalanceFromStakingToken";
 export { useRewardVaultFromToken } from "./hooks/useRewardVaultFromToken";
 export { usePollRewardVault } from "./hooks/poll-reward-vault";
+export { useSubgraphUserValidators } from "./hooks/useSubgraphUserValidators";

@@ -149,7 +149,8 @@ export const checkProposalField: CheckProposalField = (
       return null;
 
     default:
-      throw new Error(`Invalid field or type: ${fieldOrType}`);
+      console.error(`Invalid field or type: ${fieldOrType}`);
+      return null;
   }
 };
 

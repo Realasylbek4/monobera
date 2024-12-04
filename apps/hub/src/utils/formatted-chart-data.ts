@@ -1,9 +1,9 @@
 import { type Token } from "@bera/berajs";
 import {
-  BlockRewardStatsByValidatorFragment,
-  GetValidatorBlockRewardStatsQuery,
   ValidatorStakedBgtsFragment,
-  type GetValidatorTokenRewardUsagesQuery,
+  // @ts-expect-error TODOO
+  type BlockRewardStatsByValidatorFragment,
+  type GetValidatorIncentivesReceivedsQuery,
 } from "@bera/graphql/pol";
 import { addDays } from "date-fns";
 
@@ -20,7 +20,7 @@ type GroupedValidatorBgtStakedDataDelta = {
 };
 
 type TokenInformation = Token & {
-  tokenRewarded: string;
+  tokenReceived: string;
   usdValueTokenRewarded: string;
 };
 
@@ -49,7 +49,6 @@ const generateValidatorRewardsEmptyData = (
 ): BlockRewardStatsByValidatorFragment => {
   return {
     timestamp: timestamp,
-    // @ts-expect-error
     rewardRate: "0",
     commissionRate: "0",
   };
@@ -59,9 +58,9 @@ const generateValidatorBgtStakedEmptyData = (
   timestamp: string,
 ): ValidatorStakedBgtsFragment => {
   return {
-    allTimeBgtStaked: "0",
+    allTimeBGTStaked: "0",
     BGTStaked: "0",
-    coinbase: "",
+    id: "",
     timestamp: timestamp,
   };
 };
@@ -151,7 +150,7 @@ export const formatValidatorBgtDelegated = (
 };
 
 export const formatValidatorTokenRewardsUsage = (
-  data: GetValidatorTokenRewardUsagesQuery | undefined,
+  data: GetValidatorIncentivesReceivedsQuery | undefined,
   days: number,
 ) => {
   if (!data)
@@ -163,7 +162,7 @@ export const formatValidatorTokenRewardsUsage = (
   const groupedData = {} as GroupedTokenRewardsUsageData;
   const groupedTokens = {} as GroupedTokenRewardsData;
 
-  data.validatorTokenRewardUsages.forEach((item) => {
+  data.validatorIncentivesReceiveds.forEach((item) => {
     const timestamp = item.timestamp;
     const dateKey = new Date(parseInt(timestamp) / 1000)
       .toISOString()
@@ -184,12 +183,12 @@ export const formatValidatorTokenRewardsUsage = (
     if (!groupedTokens[address]) {
       groupedTokens[address] = {
         token: item.token as Token,
-        totalTokenRewarded: Number(item.tokenRewarded),
+        totalTokenRewarded: Number(item.tokenReceived),
         // @ts-expect-error
         totalUsdValueTokenRewarded: Number(item.usdValueTokenRewarded ?? "0"),
       };
     } else {
-      groupedTokens[address].totalTokenRewarded += Number(item.tokenRewarded);
+      groupedTokens[address].totalTokenRewarded += Number(item.tokenReceived);
       groupedTokens[address].totalUsdValueTokenRewarded += Number(
         // @ts-expect-error
         item.usdValueTokenRewarded ?? "0",
@@ -198,13 +197,13 @@ export const formatValidatorTokenRewardsUsage = (
     groupedData[dateKey].tokens.push({
       ...item.token,
       address: item.token.address as `0x${string}`,
-      tokenRewarded: item.tokenRewarded,
+      tokenReceived: item.tokenReceived,
       // @ts-expect-error
       usdValueTokenRewarded: item.usdValueTokenRewarded ?? "0",
     });
 
     groupedData[dateKey].totalTokenRewardedOnTimestamp += parseFloat(
-      item.tokenRewarded,
+      item.tokenReceived,
     );
     groupedData[dateKey].totalUsdValueTokenRewardedOnTimestamp += parseFloat(
       // @ts-expect-error

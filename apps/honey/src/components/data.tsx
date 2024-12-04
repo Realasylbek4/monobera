@@ -4,17 +4,27 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
-import { cloudinaryUrl, hubUrl } from "@bera/config";
+import { cloudinaryUrl, honeyTokenAddress, hubUrl } from "@bera/config";
 import { GetGlobalData } from "@bera/graphql";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
+import { useReadContract } from "wagmi";
 
 import DataCard from "./data-card";
+import { honeyAbi } from "@bera/berajs";
+import { formatEther } from "viem";
 
 export default function Data({ arcade }: { arcade: boolean }) {
   const { loading, data } = useQuery(GetGlobalData);
+  const { data: totalHoneySupply } = useReadContract({
+    address: honeyTokenAddress,
+    abi: honeyAbi,
+    functionName: "totalSupply",
+  });
   const dailyVolume = data?.honeyVolumeDayDatas[0]?.amount ?? "0";
-  const totalHoneySupply = data?.honeySupplyHourDatas[0]?.amount ?? "0";
+  const formattedTotalHoneySupply = formatEther(
+    (totalHoneySupply as bigint) ?? 0,
+  );
   return (
     <section className="py-4 lg:py-16" id="stats">
       {arcade ? (
@@ -25,7 +35,7 @@ export default function Data({ arcade }: { arcade: boolean }) {
               title="Total Honey Supply"
               value={
                 <FormattedNumber
-                  value={totalHoneySupply}
+                  value={formattedTotalHoneySupply}
                   symbol="USD"
                   compact={false}
                 />
@@ -62,7 +72,7 @@ export default function Data({ arcade }: { arcade: boolean }) {
             title="Total Honey Supply"
             value={
               <FormattedNumber
-                value={totalHoneySupply}
+                value={formattedTotalHoneySupply}
                 symbol="USD"
                 compact={false}
                 compactThreshold={9_999_999_999}

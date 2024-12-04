@@ -119,7 +119,7 @@ export const ProposalTimeline = ({
       if (proposal.status !== ProposalStatus.PendingQueue) {
         steps.push({
           title: "Proposal Queued",
-          block: proposal.voteEndBlock,
+          block: proposal.queueEnd,
           isActive: proposal.status === ProposalStatus.InQueue,
         });
 

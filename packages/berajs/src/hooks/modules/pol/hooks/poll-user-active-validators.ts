@@ -1,9 +1,9 @@
+import { type Validator } from "@bera/graphql/pol";
 import useSWR from "swr";
-import { getUserActiveValidators } from "~/actions/pol/get-user-active-validators";
 
+import { getUserActiveValidators } from "~/actions/pol/get-user-active-validators";
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
-import { type Validator } from "@bera/graphql/pol";
 import { UserValidator } from "~/types";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 
@@ -19,7 +19,7 @@ export const useUserActiveValidators = (
 ): UseUserActiveValidatorsResponse => {
   const { account, config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["useUserActiveValidators", account];
+  const QUERY_KEY = account ? ["useUserActiveValidators", account] : null;
 
   const swrResponse = useSWR<UserValidator[] | undefined>(
     QUERY_KEY,

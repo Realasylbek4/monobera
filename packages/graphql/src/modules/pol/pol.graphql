@@ -1,10 +1,10 @@
 fragment ValidatorMinimal on Validator {
-  coinbase
+  id
   amountStaked
 }
 
 query GetUserValidatorInformation($address: Bytes!) {
-  userValidatorInformations(where: { user: $address }) {
+  userValidatorInformations(where: { user: $address }, first: 1000) {
     id
     amountQueued
     amountDeposited
@@ -30,57 +30,66 @@ query GetAllValidators {
 }
 
 fragment ValidatorStakedBgts on ValidatorBGTStaked {
-  allTimeBgtStaked
+  allTimeBGTStaked
   BGTStaked
-  coinbase
+  id
   timestamp
 }
-query GetValidatorBgtStaked($address: Bytes!, $timestamp: Timestamp!) {
+
+query GetValidatorBgtStaked($pubKey: String!, $timestamp: Timestamp!) {
   validatorBgtStaked: validatorBGTStakeds(
     interval: day
-    where: { coinbase: $address, timestamp_gte: $timestamp }
+    where: { validator: $pubKey, timestamp_gte: $timestamp }
   ) {
     ...ValidatorStakedBgts
   }
 }
 
-fragment BlockRewardStatsByValidator on BlockRewardStatsByValidator {
-  timestamp
-  # rewardRate
-  # commissionRate
+# fragment BlockRewardStatsByValidator on BlockRewardStatsByValidator {
+#   timestamp
+#   # rewardRate
+#   # commissionRate
 
-  validator {
-    ...ValidatorMinimal
-  }
-}
+#   validator {
+#     ...ValidatorMinimal
+#   }
+# }
 
-query GetValidatorBlockRewardStats($address: String!, $timestamp: Timestamp!) {
-  blockRewardStatsByValidators(
-    interval: day
-    where: { validator: $address, timestamp_gte: $timestamp }
-  ) {
-    ...BlockRewardStatsByValidator
-  }
-}
+# this is prob an issue.
+# query GetValidatorBlockRewardStats($address: String!, $timestamp: Timestamp!) {
+#   blockRewardStatsByValidators(
+#     interval: day
+#     where: { validator: $address, timestamp_gte: $timestamp }
+#   ) {
+#     ...BlockRewardStatsByValidator
+#   }
+# }
 
-query GetValidatorTokenRewardUsages($address: String!, $timestamp: Timestamp!) {
-  validatorTokenRewardUsages(
+query GetValidatorIncentivesReceiveds(
+  $address: String!
+  $timestamp: Timestamp!
+) {
+  validatorIncentivesReceiveds(
     interval: day
     where: { validator: $address, timestamp_gte: $timestamp }
   ) {
     token {
       ...StakingToken
     }
-    tokenRewarded
+    tokenReceived
     # usdValueTokenRewarded
     timestamp
-    allTimeTokenRewarded
+    allTimeTokenReceived
     # allTimeUsdValueTokenRewarded
     id
   }
-  validatorUsages(interval: day, where: { validator: $address }, first: 1) {
+  validatorRewardsDistributeds(
+    interval: day
+    where: { validator: $address }
+    first: 1
+  ) {
     # allTimeUsdValueTokenRewarded
-    allTimeBgtDirected
+    allTimeBGTDistributed
   }
 }
 
@@ -111,10 +120,7 @@ query GetValidatorBlockStats($address: String = "") {
     first: 1
     where: { validator: $address }
   ) {
-    allTimeblockCount
-  }
-  blockStats_collection(interval: hour, first: 1) {
-    allTimeblockCount
+    allTimeBlockCount
   }
 }
 
@@ -124,9 +130,9 @@ query GetAllValidatorBlockCount($timestamp: Timestamp) {
     first: 1000
     where: { timestamp_gte: $timestamp }
   ) {
-    allTimeblockCount
+    allTimeBlockCount
     validator {
-      coinbase
+      publicKey
     }
     timestamp
   }
@@ -187,7 +193,7 @@ query GetGauges {
 }
 
 query GetWeeklyBgtInflation($wbera: ID!) {
-  globalIncentivesUsages(interval: day, first: 7) {
+  globalRewardDistributions(interval: day, first: 7) {
     BGTDistributed
   }
   tokenInformation(id: $wbera) {

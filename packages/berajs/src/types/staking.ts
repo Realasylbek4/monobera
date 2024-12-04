@@ -15,6 +15,7 @@ export interface ValidatorInfo {
 export type Validator = {
   id: Address;
   coinbase: Address;
+  operator: Address;
   commission: number;
   amountStaked: string;
   amountQueued: string;
@@ -22,7 +23,7 @@ export type Validator = {
   cuttingBoard: { startBlock: string; weights: CuttingBoardWeight[] };
   rewardRate: string;
   allTimeData: {
-    allTimeBgtDirected: number;
+    allTimeBGTDistributed: number;
     allTimeHoneyValueTokenRewards: number;
     allTimeUniqueTokenCount: number;
     allTimeHoneyValueBgtDirected?: number;
@@ -151,7 +152,7 @@ export type ValidatorUsages = {
 export type ValidatorUsage = {
   bgtDirected: string;
   timestamp: string;
-  allTimeBgtDirected: string;
+  allTimeBGTDistributed: string;
   allTimeUsdValueBgtDirected: string;
   validator: {
     commission: string;
@@ -159,12 +160,12 @@ export type ValidatorUsage = {
 };
 
 export type AllTimeBlockCount = {
-  allTimeblockCount: string;
+  allTimeBlockCount: string;
 };
 
-export type ValidatorTokenRewardUsages = {
+export type ValidatorIncentivesReceiveds = {
   token: Token;
-  tokenRewarded: string;
+  tokenReceived: string;
   usdValueTokenRewarded: string;
   timestamp: string;
   allTimeUsdValueTokenRewarded: string;

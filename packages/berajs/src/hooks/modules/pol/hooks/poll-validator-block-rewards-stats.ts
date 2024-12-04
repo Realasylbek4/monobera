@@ -1,4 +1,4 @@
-import { type GetValidatorBlockRewardStatsQuery } from "@bera/graphql/pol";
+// import { type GetValidatorBlockRewardStatsQuery } from "@bera/graphql/pol";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { Address } from "viem";
@@ -11,13 +11,12 @@ export const usePollValidatorBlockRewardStats = (
   address: Address,
   daysRange: number,
   options?: DefaultHookOptions,
-): DefaultHookReturnType<GetValidatorBlockRewardStatsQuery | undefined> => {
+): DefaultHookReturnType<undefined> => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   const QUERY_KEY = ["usePollValidatorBlockRewardStats", address, daysRange];
-  const swrResponse = useSWRImmutable<
-    GetValidatorBlockRewardStatsQuery | undefined
-  >(
+  const swrResponse = useSWRImmutable<// GetValidatorBlockRewardStatsQuery |
+  undefined>(
     QUERY_KEY,
     async () => {
       if (!address) {

@@ -1,3 +1,4 @@
+import { governanceAccelerateProposal } from "@bera/config";
 import {
   ProposalSelectionFragment,
   ProposalStatus,
@@ -74,6 +75,16 @@ export function computeActualStatus(
     if (proposal.queueEnd < currentBlock) {
       return ProposalStatus.PendingExecution;
     }
+  }
+
+  if (
+    governanceAccelerateProposal &&
+    proposalState === ProposalState.Active &&
+    BigInt(proposal.quorum) < BigInt(proposal.pollResult.totalTowardsQuorum) &&
+    Number(proposal.pollResult.forPercentage) >
+      Number(proposal.pollResult.againstPercentage)
+  ) {
+    return ProposalStatus.PendingQueue;
   }
 
   if (proposal.status === ProposalStatus.Pending) {

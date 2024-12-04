@@ -130,6 +130,9 @@ export default function ValidatorsTable() {
             onRowClick={(row: any) =>
               router.push(getHubValidatorPath(row.original.coinbase))
             }
+            onRowHover={(row: any) =>
+              router.prefetch(getHubValidatorPath(row.original.coinbase))
+            }
           />
         </TabsContent>
         <TabsContent value="my-validators">

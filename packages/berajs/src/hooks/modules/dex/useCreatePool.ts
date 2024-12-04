@@ -19,7 +19,7 @@ import { wrapNativeToken, wrapNativeTokens } from "~/utils/tokenWrapping";
 import { balancerPoolCreationHelperAbi } from "~/abi";
 import { ADDRESS_ZERO } from "~/config";
 import { IContractWrite } from "~/hooks/useContractWrite";
-import { Token, TokenInput } from "~/types";
+import { RateProvider, Token, TokenInput } from "~/types";
 
 const DEFAULT_WEIGHTS_DUPLICATION_THRESHOLD = 0.005;
 const DEFAULT_POOL_CREATE_GAS_LIMIT = 7920027n; // NOTE: this is the metamask gas limit, in experiments we find we can easily use 75% of this.
@@ -35,6 +35,7 @@ interface UseCreatePoolProps {
   poolName: string;
   amplification: number;
   weightsDuplicationThreshold?: number;
+  rateProviders: Record<`0x${string}`, RateProvider>;
 }
 
 interface UseCreatePoolReturn {
@@ -57,6 +58,7 @@ const createStablePoolArgs = (
   owner: string,
   amplification: number,
   gasLimit: bigint = DEFAULT_POOL_CREATE_GAS_LIMIT,
+  rateProviders: Record<`0x${string}`, RateProvider> = {},
 ) => {
   // Map and sort pool creation token addresses NOTE: we should never see BERA in this array.
   const sortedPoolCreateAddresses = poolCreateTokens
@@ -93,12 +95,27 @@ const createStablePoolArgs = (
       : 0n;
   const joinWBERAPoolWithBERA = value > 0n;
 
-  const rateProviders = Array(sortedPoolCreateAddresses.length).fill(
+  // NOTE: we allow one or more rate providers and any which are not passed are filled with 0x0 address
+  const sortedRateProviders = Array(sortedPoolCreateAddresses.length).fill(
     ADDRESS_ZERO,
   );
+
+  sortedPoolCreateAddresses.forEach((address, index) => {
+    const rateProvider = rateProviders[address as `0x${string}`];
+    if (rateProvider) {
+      sortedRateProviders[index] = rateProvider.providerAddress;
+    }
+  });
+
   const cacheDurations = Array(sortedPoolCreateAddresses.length).fill(
     BigInt(100),
   );
+
+  const exemptFromYieldFees = sortedRateProviders.every(
+    (provider) => provider === ADDRESS_ZERO,
+  )
+    ? false // Yield protocol fees are applied (not exempt) because there are no rate providers to justify exemption.
+    : true; // Yield protocol fees can be exempted because the protocol already tracks yield using rate providers.
 
   return {
     address: balancerPoolCreationHelper,
@@ -109,9 +126,9 @@ const createStablePoolArgs = (
       poolSymbol,
       sortedPoolCreateAddresses,
       BigInt(amplification),
-      rateProviders,
+      sortedRateProviders,
       cacheDurations,
-      false, // Exempt from yield protocol fee NOTE: this should be false for stable pools if rate providers are 0x0
+      exemptFromYieldFees,
       swapFeePercentage,
       sortedAmountsIn,
       owner as `0x${string}`,
@@ -204,6 +221,7 @@ export const useCreatePool = ({
   swapFee,
   owner,
   amplification,
+  rateProviders,
   weightsDuplicationThreshold = DEFAULT_WEIGHTS_DUPLICATION_THRESHOLD,
 }: UseCreatePoolProps): UseCreatePoolReturn => {
   // 1. identify if the pool is a duplicate
@@ -342,6 +360,7 @@ export const useCreatePool = ({
     poolSymbol,
     owner,
     amplification,
+    rateProviders,
   ]);
 
   return {

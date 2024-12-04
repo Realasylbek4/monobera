@@ -30,6 +30,14 @@ export interface TokenInput extends Token {
   exceeding: boolean;
 }
 
+export interface RateProvider {
+  providerAddress: `0x${string}`;
+  tokenAddress: `0x${string}`;
+  tokenSymbol: string;
+  cacheDuration: number;
+  error: string | null;
+}
+
 export interface SwapRequest {
   tokenIn: Address;
   tokenOut: Address;

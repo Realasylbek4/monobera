@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  RateProvider,
   balancerComposableStablePoolFactoryV6,
   balancerPoolCreationHelperAbi,
   useBeraJs,
@@ -49,6 +50,7 @@ import CreatePoolInput from "../components/create-pool-input";
 import DynamicPoolCreationPreview from "../components/dynamic-pool-create-preview";
 import OwnershipInput, { OwnershipType } from "../components/ownership-input";
 import PoolTypeSelector from "../components/pool-type-selector";
+import RateProviderInputs from "../components/rate-provider-input";
 import { getPoolUrl } from "../fetchPools";
 
 const emptyTokenInput: TokenInputType = {
@@ -64,6 +66,13 @@ const emptyToken: Token = {
   decimals: 18,
   name: "",
   symbol: "",
+};
+const emptyRateProvider: RateProvider = {
+  tokenAddress: ZERO_ADDRESS as `0x${string}`,
+  tokenSymbol: "",
+  providerAddress: ZERO_ADDRESS,
+  cacheDuration: 100, // Safe default cache duration
+  error: null,
 };
 
 export default function CreatePageContent() {
@@ -147,8 +156,8 @@ export default function CreatePageContent() {
       type === OwnershipType.Governance
         ? balancerDelegatedOwnershipAddress
         : type === OwnershipType.Fixed
-          ? ZERO_ADDRESS
-          : account || zeroAddress,
+        ? ZERO_ADDRESS
+        : account || zeroAddress,
     );
   };
 
@@ -235,6 +244,52 @@ export default function CreatePageContent() {
     });
   };
 
+  // These are used for Metastable pools specifically
+  const [rateProviders, setRateProviders] = useState<
+    Record<`0x${string}`, RateProvider>
+  >({});
+
+  const handleRateProviderChange = (
+    tokenAddress: `0x${string}`,
+    update: Partial<RateProvider>,
+  ) => {
+    // check address validity (it's also OK to not fill this in at all)
+    let error = null;
+    if (update.providerAddress && !isAddress(update.providerAddress)) {
+      error = "Invalid provider address";
+    }
+    setRateProviders((prev) => ({
+      ...prev,
+      [tokenAddress]: {
+        ...(prev[tokenAddress] || { tokenAddress }),
+        ...update,
+        error,
+      },
+    }));
+  };
+
+  useEffect(() => {
+    setRateProviders((prev) => {
+      // Add or update RateProvider entries for tokens in poolCreateTokens
+      const updatedRateProviders = { ...prev };
+      poolCreateTokens.forEach((token) => {
+        if (!updatedRateProviders[token.address]) {
+          updatedRateProviders[token.address] = {
+            ...emptyRateProvider,
+            tokenAddress: token.address,
+            tokenSymbol: token.symbol,
+          };
+        }
+      });
+      Object.keys(updatedRateProviders).forEach((address) => {
+        if (!poolCreateTokens.some((token) => token.address === address)) {
+          delete updatedRateProviders[address as `0x${string}`];
+        }
+      });
+      return updatedRateProviders;
+    });
+  }, [poolCreateTokens]);
+
   // Initialize useCreatePool hook to get pool setup data and arguments for creating pool
   const {
     generatedPoolName,
@@ -252,6 +307,7 @@ export default function CreatePageContent() {
     poolSymbol,
     owner,
     amplification,
+    rateProviders,
   });
 
   // Synchronize the generated pool name and symbol with state
@@ -389,6 +445,14 @@ export default function CreatePageContent() {
             </Alert>
           )}
         </section>
+
+        {poolType === PoolType.MetaStable && (
+          <RateProviderInputs
+            rateProviders={rateProviders}
+            handleRateProviderChange={handleRateProviderChange}
+            disabled={!poolCreateTokens.every((token) => token.address)}
+          />
+        )}
 
         <section className="flex w-full flex-col gap-4">
           <h2 className="self-start text-3xl font-semibold">

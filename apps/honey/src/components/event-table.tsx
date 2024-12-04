@@ -79,40 +79,25 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
 export const EventTable = ({
   events,
   isLoading,
-  arcade,
 }: {
   // events: HoneyMint[] | HoneyRedemption[] ;
   events: HoneyTxn[];
   isLoading: boolean | undefined;
-  arcade: boolean;
 }) => {
   const { data: tokenData } = useTokens();
   return (
     <Table>
       <TableHeader>
-        <TableRow
-          className={cn(
-            arcade &&
-              "border-b border-blue-300 bg-blue-100 text-blue-600 hover:bg-blue-100",
-          )}
-        >
-          <TableHead className={cn(arcade && "text-blue-600")}>
-            Action
-          </TableHead>
-          <TableHead className={cn(arcade && "text-blue-600")}>Value</TableHead>
-          <TableHead
-            className={cn("hidden sm:table-cell", arcade && "text-blue-600")}
-          >
+        <TableRow className="border-b border-blue-300 bg-blue-100 text-blue-600 hover:bg-blue-100">
+          <TableHead className="text-blue-600">Action</TableHead>
+          <TableHead className="text-blue-600">Value</TableHead>
+          <TableHead className="hidden sm:table-cell text-blue-600">
             Tokens
           </TableHead>
-          <TableHead
-            className={cn("hidden sm:table-cell", arcade && "text-blue-600")}
-          >
+          <TableHead className="hidden sm:table-cell text-blue-600">
             TxnHash
           </TableHead>
-          <TableHead className={cn("text-center", arcade && "text-blue-600")}>
-            Time
-          </TableHead>
+          <TableHead className="text-center text-blue-600">Time</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -121,10 +106,7 @@ export const EventTable = ({
             if (!event) return null;
             return (
               <TableRow
-                className={cn(
-                  "hover:cursor-pointer",
-                  arcade ? "hover:bg-blue-200" : "hover:bg-muted",
-                )}
+                className="hover:cursor-pointer hover:bg-blue-200"
                 key={event.id}
                 onClick={() =>
                   window.open(

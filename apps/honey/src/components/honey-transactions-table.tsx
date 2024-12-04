@@ -20,11 +20,7 @@ export interface MappedTokens {
   [key: string]: number;
 }
 
-export default function HoneyTransactionsTable({
-  arcade,
-}: {
-  arcade: boolean;
-}) {
+export default function HoneyTransactionsTable() {
   const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
   const {
     allData,
@@ -98,67 +94,40 @@ export default function HoneyTransactionsTable({
         defaultValue={Selection.AllTransactions}
         onValueChange={(value: string) => setSelectedTab(value as Selection)}
       >
-        <TabsList
-          className={cn(
-            "w-full rounded-md ",
-            arcade && "border-2 border-dashed border-blue-900 bg-blue-50",
-          )}
-        >
+        <TabsList className="w-full rounded-md border-2 border-dashed border-blue-900 bg-blue-50">
           <TabsTrigger
             value={Selection.AllTransactions}
-            className={cn(
-              "w-full text-xs text-stone-700  sm:text-sm",
-              arcade && "data-[state=active]:bg-red-600",
-            )}
+            className="w-full text-xs text-stone-700  sm:text-sm data-[state=active]:bg-red-600"
           >
-            {arcade && "🧾"} All {arcade ? "txns" : "transactions"}
+            🧾 All txns
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Mints}
-            className={cn(
-              "w-full text-xs text-stone-700  sm:text-sm",
-              arcade && "data-[state=active]:bg-red-600",
-            )}
+            className="w-full text-xs text-stone-700  sm:text-sm data-[state=active]:bg-red-600"
           >
-            {arcade && "🪙"} Mints
+            🪙 Mints
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Burns}
-            className={cn(
-              "w-full text-xs text-stone-700  sm:text-sm",
-              arcade && "data-[state=active]:bg-red-600",
-            )}
+            className="w-full text-xs text-stone-700  sm:text-sm data-[state=active]:bg-red-600"
           >
-            {arcade && "🔥"} Redeems
+            🔥 Redeems
           </TabsTrigger>
         </TabsList>
-        <div
-          className={cn(
-            "mt-4 overflow-hidden rounded-md border ",
-            arcade && "border-blue-300 bg-blue-50",
-          )}
-        >
+        <div className="mt-4 overflow-hidden rounded-md border border-blue-300 bg-blue-50">
           <TabsContent value={Selection.AllTransactions} className="mt-0">
             {/* <DataTable
               columns={transaction_history_columns}
               data={allData ?? []}
             /> */}
-            <EventTable
-              events={allData}
-              isLoading={isAllDataLoadingMore}
-              arcade={arcade}
-            />
+            <EventTable events={allData} isLoading={isAllDataLoadingMore} />
           </TabsContent>
           <TabsContent value={Selection.Mints} className="mt-0">
             {/* <DataTable
               columns={transaction_history_columns}
               data={mintData ?? []}
             /> */}
-            <EventTable
-              events={mintData}
-              isLoading={isMintDataLoadingMore}
-              arcade={arcade}
-            />
+            <EventTable events={mintData} isLoading={isMintDataLoadingMore} />
           </TabsContent>
           <TabsContent value={Selection.Burns} className="mt-0">
             {/* <DataTable
@@ -168,7 +137,6 @@ export default function HoneyTransactionsTable({
             <EventTable
               events={redemptionData}
               isLoading={isRedemptionDataLoadingMore}
-              arcade={arcade}
             />
           </TabsContent>
         </div>

@@ -14,7 +14,7 @@ import DataCard from "./data-card";
 import { honeyAbi } from "@bera/berajs";
 import { formatEther } from "viem";
 
-export default function Data({ arcade }: { arcade: boolean }) {
+export default function Data() {
   const { loading, data } = useQuery(GetGlobalData);
   const { data: totalHoneySupply } = useReadContract({
     address: honeyTokenAddress,
@@ -27,47 +27,9 @@ export default function Data({ arcade }: { arcade: boolean }) {
   );
   return (
     <section className="py-4 lg:py-16" id="stats">
-      {arcade ? (
-        <div className="flex gap-8">
-          <ArcadeData />
-          <div className="flex w-full flex-1 flex-col gap-4">
-            <DataCard
-              title="Total Honey Supply"
-              value={
-                <FormattedNumber
-                  value={formattedTotalHoneySupply}
-                  symbol="USD"
-                  compact={false}
-                />
-              }
-              icon={<Icons.lock className="h-5 w-5" />}
-              arcade={arcade}
-              isLoading={loading}
-            />
-            <DataCard
-              title="24H Volume"
-              value={
-                <FormattedNumber
-                  value={dailyVolume}
-                  symbol="USD"
-                  compact={false}
-                />
-              }
-              icon={<Icons.candleStick className="h-5 w-5" />}
-              arcade={arcade}
-              isLoading={loading}
-            />
-            <DataCard
-              title="Honey Price"
-              value="$1.00"
-              icon={<Icons.honey className="h-5 w-5" />}
-              arcade={arcade}
-              isLoading={loading}
-            />
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="flex gap-8">
+        <ArcadeData />
+        <div className="flex w-full flex-1 flex-col gap-4">
           <DataCard
             title="Total Honey Supply"
             value={
@@ -75,11 +37,9 @@ export default function Data({ arcade }: { arcade: boolean }) {
                 value={formattedTotalHoneySupply}
                 symbol="USD"
                 compact={false}
-                compactThreshold={9_999_999_999}
               />
             }
-            icon={<Icons.lock />}
-            arcade={arcade}
+            icon={<Icons.lock className="h-5 w-5" />}
             isLoading={loading}
           />
           <DataCard
@@ -89,22 +49,19 @@ export default function Data({ arcade }: { arcade: boolean }) {
                 value={dailyVolume}
                 symbol="USD"
                 compact={false}
-                compactThreshold={9_999_999_999}
               />
             }
-            icon={<Icons.candleStick />}
-            arcade={arcade}
+            icon={<Icons.candleStick className="h-5 w-5" />}
             isLoading={loading}
           />
           <DataCard
             title="Honey Price"
             value="$1.00"
-            icon={<Icons.honey className="h-6 w-6" />}
-            arcade={arcade}
+            icon={<Icons.honey className="h-5 w-5" />}
             isLoading={loading}
           />
         </div>
-      )}
+      </div>
     </section>
   );
 }

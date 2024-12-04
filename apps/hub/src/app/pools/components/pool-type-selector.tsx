@@ -17,7 +17,7 @@ const PoolTypeSelector: React.FC<PoolTypeSelectorProps> = ({
   return (
     <section className="flex w-full flex-col gap-4">
       <h2 className="self-start text-3xl font-semibold">Select a Pool Type</h2>
-      <div className="flex w-full flex-row gap-6">
+      <div className={cn("flex w-full flex-col gap-3 sm:flex-row sm:gap-6")}>
         <Card
           onClick={() => onPoolTypeChange(PoolType.ComposableStable)}
           className={cn(

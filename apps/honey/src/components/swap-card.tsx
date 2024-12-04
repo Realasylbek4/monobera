@@ -47,6 +47,7 @@ export function SwapCard() {
     needsApproval,
     exceedBalance,
     isTyping,
+    isBadCollateral,
   } = usePsm();
 
   return (
@@ -148,6 +149,8 @@ export function SwapCard() {
                   !toAmount ||
                   exceedBalance ||
                   isTyping ||
+                  isBadCollateral?.isBlacklisted ||
+                  isBadCollateral?.isDepegged ||
                   !payload
                 }
                 onClick={() => {

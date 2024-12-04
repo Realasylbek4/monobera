@@ -593,7 +593,8 @@ export default function CreatePageContent() {
               ) ||
               (poolType === PoolType.Weighted
                 ? !weights.every((weight) => weight > 0n)
-                : !amplification)
+                : !amplification) ||
+              Object.entries(rateProviders).some(([_, rp]) => rp.error)
             }
           >
             Preview

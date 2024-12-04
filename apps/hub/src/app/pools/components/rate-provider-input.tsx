@@ -18,8 +18,7 @@ export default function RateProviderInputs({
   handleRateProviderChange,
   disabled,
 }: Props) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  // FIXME useDropdown component properly here
+  // NOTE: in the final version of this component we will have this as an expandable section
   return (
     <section
       className={cn("flex w-full flex-col gap-4", disabled && "opacity-50")}
@@ -27,17 +26,6 @@ export default function RateProviderInputs({
     >
       <div className="flex flex-row space-x-2">
         <h2 className="self-start text-3xl font-semibold">Rate Providers</h2>
-        {isExpanded && !disabled ? (
-          <button type="button" onClick={() => setIsExpanded(false)}>
-            Collapse
-          </button>
-        ) : (
-          <button type="button" onClick={() => setIsExpanded(true)}>
-            Expand
-          </button>
-        )}
-      </div>
-      {isExpanded && !disabled && (
         <div className="flex w-full flex-col space-y-2">
           {Object.entries(rateProviders).map(([_, rateProvider]) => {
             return (
@@ -78,7 +66,7 @@ export default function RateProviderInputs({
             );
           })}
         </div>
-      )}
+      </div>
     </section>
   );
 }

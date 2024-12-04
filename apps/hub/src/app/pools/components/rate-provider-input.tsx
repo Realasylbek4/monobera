@@ -24,48 +24,43 @@ export default function RateProviderInputs({
       className={cn("flex w-full flex-col gap-4", disabled && "opacity-50")}
       title={disabled ? "You must select tokens to set rate providers" : ""}
     >
-      <div className="flex flex-row space-x-2">
-        <h2 className="self-start text-3xl font-semibold">Rate Providers</h2>
-        <div className="flex w-full flex-col space-y-2">
-          {Object.entries(rateProviders).map(([_, rateProvider]) => {
-            return (
-              <>
-                <h3>{rateProvider.tokenSymbol}</h3>
-                <InputWithLabel
-                  label="Address"
-                  disabled={false}
-                  value={rateProvider.providerAddress}
-                  onChange={(e) => {
+      <h4 className="self-start text-3xl font-semibold">Rate Providers</h4>
+      <div className="flex w-full flex-col space-y-4">
+        {Object.entries(rateProviders).map(([_, rateProvider]) => {
+          return (
+            <div className="space-y-3">
+              <h4 className="font-semibold">{rateProvider.tokenSymbol}</h4>
+              <InputWithLabel
+                label="Address"
+                disabled={false}
+                value={rateProvider.providerAddress}
+                onChange={(e) => {
+                  handleRateProviderChange(rateProvider.tokenAddress, {
+                    providerAddress: e.target.value as `0x${string}`, // NOTE: we verify this and set an error in the parent
+                  });
+                }}
+              />
+              <InputWithLabel
+                label="Cache Duration"
+                disabled={false}
+                value={rateProvider.cacheDuration}
+                onChange={(e) => {
+                  if (e.target.value && !Number.isNaN(Number(e.target.value))) {
                     handleRateProviderChange(rateProvider.tokenAddress, {
-                      providerAddress: e.target.value as `0x${string}`, // NOTE: we verify this and set an error in the parent
+                      cacheDuration: getSafeNumber(e.target.value),
                     });
-                  }}
-                />
-                <InputWithLabel
-                  label="Cache Duration"
-                  disabled={false}
-                  value={rateProvider.cacheDuration}
-                  onChange={(e) => {
-                    if (
-                      e.target.value &&
-                      !Number.isNaN(Number(e.target.value))
-                    ) {
-                      handleRateProviderChange(rateProvider.tokenAddress, {
-                        cacheDuration: getSafeNumber(e.target.value),
-                      });
-                    }
-                  }}
-                />
-                {rateProvider.error && (
-                  <Alert variant="destructive" className="my-4">
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>{rateProvider.error}</AlertDescription>
-                  </Alert>
-                )}
-              </>
-            );
-          })}
-        </div>
+                  }
+                }}
+              />
+              {rateProvider.error && (
+                <Alert variant="destructive" className="my-4">
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription>{rateProvider.error}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+          );
+        })}
       </div>
     </section>
   );

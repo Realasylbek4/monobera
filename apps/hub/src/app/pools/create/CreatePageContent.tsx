@@ -156,8 +156,8 @@ export default function CreatePageContent() {
       type === OwnershipType.Governance
         ? balancerDelegatedOwnershipAddress
         : type === OwnershipType.Fixed
-        ? ZERO_ADDRESS
-        : account || zeroAddress,
+          ? ZERO_ADDRESS
+          : account || zeroAddress,
     );
   };
 

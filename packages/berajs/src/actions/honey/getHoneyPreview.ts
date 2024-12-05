@@ -27,7 +27,7 @@ export const getHoneyPreview = async ({
   collateral,
   amount,
   method,
-}: HoneyPreviewArgs): Promise<string | undefined> => {
+}: HoneyPreviewArgs): Promise<string[] | undefined> => {
   try {
     if (!config.contracts?.honeyFactoryAddress)
       throw new Error("missing contract address honeyFactoryAddress");
@@ -47,16 +47,25 @@ export const getHoneyPreview = async ({
       abi: honeyFactoryReaderAbi,
       functionName: method,
       args: [collateral.address, formattedAmount],
-    })) as bigint;
+    })) as bigint | bigint[];
 
-    let formattedResult = "0";
+    const formattedResult = ["0", "0"];
     if (
       method === HoneyPreviewMethod.Mint ||
       method === HoneyPreviewMethod.HoneyToRedeem
     ) {
-      formattedResult = formatUnits(result, 18); //honey decimals
+      formattedResult[0] = formatUnits(result as bigint, 18); //honey decimals
+    } else if (method === HoneyPreviewMethod.Redeem) {
+      formattedResult[0] = formatUnits(result as bigint, collateral.decimals);
     } else {
-      formattedResult = formatUnits(result, collateral.decimals);
+      formattedResult[0] = formatUnits(
+        (result as bigint[])[0],
+        collateral.decimals,
+      );
+      formattedResult[1] = formatUnits(
+        (result as bigint[])[1],
+        collateral.decimals,
+      );
     }
     return formattedResult;
   } catch (e) {

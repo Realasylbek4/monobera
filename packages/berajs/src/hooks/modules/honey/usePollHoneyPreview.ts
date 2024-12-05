@@ -14,7 +14,7 @@ export interface UsePollHoneyPreviewArgs {
 }
 
 export interface UsePollHoneyPreviewResponse
-  extends DefaultHookReturnType<string | undefined> {}
+  extends DefaultHookReturnType<string[] | undefined> {}
 
 export const usePollHoneyPreview = (
   { collateral, amount, mint, given_in }: UsePollHoneyPreviewArgs,
@@ -30,8 +30,8 @@ export const usePollHoneyPreview = (
       : HoneyPreviewMethod.HoneyToRedeem;
 
   const QUERY_KEY =
-    collateral && Number(amount) && given_in
-      ? [method, collateral?.address, amount, mint, given_in]
+    collateral && Number(amount)
+      ? [method, collateral?.address, amount, mint, given_in.toString()]
       : null;
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
@@ -57,6 +57,7 @@ export const usePollHoneyPreview = (
       refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
     },
   );
+
   return {
     ...swrResponse,
     refresh: () => void swrResponse.mutate(),

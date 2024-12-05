@@ -98,7 +98,7 @@ export function SwapCard() {
                 selected={selectedFrom}
                 selectedTokens={[selectedFrom, selectedTo]}
                 onTokenSelection={setSelectedFrom}
-                amount={fromAmount}
+                amount={fromAmount[0]}
                 balance={fromBalance?.formattedBalance}
                 selectable={selectedFrom?.address !== honey?.address}
                 customTokenList={collateralList}
@@ -106,7 +106,7 @@ export function SwapCard() {
                 setIsTyping={setIsTyping}
                 setAmount={(amount) => {
                   setGivenIn(true);
-                  setFromAmount(amount);
+                  setFromAmount([amount, "0"]);
                 }}
               />
               <hr />
@@ -117,10 +117,10 @@ export function SwapCard() {
                 selected={selectedTo}
                 selectedTokens={[selectedFrom, selectedTo]}
                 setIsTyping={setIsTyping}
-                amount={toAmount}
+                amount={toAmount[0]}
                 setAmount={(amount) => {
                   setGivenIn(false);
-                  setToAmount(amount);
+                  setToAmount([amount, "0"]);
                 }}
                 selectable={selectedTo?.address !== honey?.address}
                 customTokenList={collateralList}
@@ -137,7 +137,7 @@ export function SwapCard() {
                 token={selectedFrom}
                 spender={honeyFactoryAddress}
                 amount={parseUnits(
-                  fromAmount ?? "0",
+                  fromAmount?.[0] ?? "0",
                   selectedFrom?.decimals ?? 18,
                 )}
               />

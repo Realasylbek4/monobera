@@ -134,7 +134,7 @@ export function HoneyMachine() {
       } else {
         if (userReady.value) userReady.value = false;
         if (buttonState) buttonState.value = 0;
-        setFromAmount(undefined);
+        setFromAmount([]);
       }
     }
   }, [isReady, userReady]);
@@ -298,7 +298,7 @@ export function HoneyMachine() {
                     selected={selectedFrom}
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedFrom}
-                    amount={fromAmount}
+                    amount={fromAmount[0]}
                     balance={fromBalance?.formattedBalance}
                     selectable={selectedFrom?.address !== honey?.address}
                     customTokenList={collateralList}
@@ -306,7 +306,7 @@ export function HoneyMachine() {
                     setIsTyping={setIsTyping}
                     setAmount={(amount) => {
                       setGivenIn(true);
-                      setFromAmount(amount);
+                      setFromAmount([amount, "0"]);
                     }}
                   />
                 </div>
@@ -318,10 +318,10 @@ export function HoneyMachine() {
                     selected={selectedTo}
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedTo}
-                    amount={toAmount}
+                    amount={toAmount[0]}
                     setAmount={(amount) => {
                       setGivenIn(false);
-                      setToAmount(amount);
+                      setToAmount([amount, "0"]);
                     }}
                     selectable={selectedTo?.address !== honey?.address}
                     customTokenList={collateralList}

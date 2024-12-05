@@ -46,9 +46,9 @@ export const usePsm = () => {
     }
   }, [collateralList, honey]);
 
-  const [fromAmount, setFromAmount] = useState<string | undefined>(undefined);
+  const [fromAmount, setFromAmount] = useState<string[]>([]);
 
-  const [toAmount, setToAmount] = useState<string | undefined>(undefined);
+  const [toAmount, setToAmount] = useState<string[]>([]);
 
   const isMint = selectedFrom?.address !== honey?.address;
 
@@ -113,18 +113,18 @@ export const usePsm = () => {
     },
   });
 
-  const { data: honeyPreview, isLoading: isHoneyPreviewLoading } =
+  const { data: previewRes, isLoading: isHoneyPreviewLoading } =
     usePollHoneyPreview({
       collateral: isTyping ? undefined : collateral,
-      amount: (givenIn ? fromAmount : toAmount) ?? "0",
+      amount: (givenIn ? fromAmount[0] : toAmount[0]) ?? "0",
       mint: isMint,
       given_in: givenIn,
     });
 
   useEffect(() => {
-    if (givenIn) setToAmount(honeyPreview);
-    else setFromAmount(honeyPreview);
-  }, [honeyPreview]);
+    if (givenIn) setToAmount(previewRes ?? []);
+    else setFromAmount(previewRes ?? []);
+  }, [previewRes]);
 
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
@@ -146,17 +146,17 @@ export const usePsm = () => {
       ? ([
           collateral?.address,
           parseUnits(
-            fromAmount ?? "0",
+            fromAmount?.[0] ?? "0",
             (isMint ? collateral?.decimals : honey?.decimals) ?? 18,
           ),
           account ?? "",
         ] as const)
       : undefined;
 
-  const needsApproval = BigNumber(fromAmount ?? "0").gt(
+  const needsApproval = BigNumber(fromAmount?.[0] ?? "0").gt(
     allowance?.formattedAllowance ?? "0",
   );
-  const exceedBalance = BigNumber(fromAmount ?? "0").gt(
+  const exceedBalance = BigNumber(fromAmount?.[0] ?? "0").gt(
     fromBalance?.formattedBalance ?? "0",
   );
 

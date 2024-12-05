@@ -12,6 +12,7 @@ import {
   DEFAULT_SLIPPAGE,
   DEFAULT_SOUND_ENABLED,
   LOCAL_STORAGE_KEYS,
+  MAX_INPUT_DEADLINE,
 } from "~/utils/constants";
 
 export enum SELECTION {
@@ -165,15 +166,20 @@ export default function SwapSettings({
             <Input
               type="number"
               step="any"
-              min={0.1}
-              max={100}
-              className="h-[40px] pl-1 pr-9 text-right"
+              className={cn(
+                "h-[40px] pl-1 pr-9",
+                deadlineType === SELECTION.INFINITY
+                  ? "text-center"
+                  : "text-right",
+              )}
               disabled={deadlineType !== SELECTION.CUSTOM}
-              placeholder="1"
+              placeholder={deadlineType === SELECTION.INFINITY ? "∞" : ""}
               value={
                 deadlineType === SELECTION.AUTO
                   ? DEFAULT_DEADLINE
-                  : deadlineValue
+                  : deadlineType === SELECTION.INFINITY
+                    ? ""
+                    : deadlineValue
               }
               onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
                 e.key === "-" && e.preventDefault()
@@ -185,12 +191,15 @@ export default function SwapSettings({
                     deadlineType === SELECTION.AUTO && "opacity-50",
                   )}
                 >
-                  min
+                  sec
                 </p>
               }
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setDeadlineValue(Number(e.target.value))
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                let value = Number(e.target.value);
+                if (value < 0.1) value = 0.1;
+                if (value > MAX_INPUT_DEADLINE) value = MAX_INPUT_DEADLINE;
+                setDeadlineValue(value);
+              }}
             />
           </div>
           {deadlineType === SELECTION.INFINITY && (

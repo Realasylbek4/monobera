@@ -75,6 +75,15 @@ const emptyRateProvider: RateProvider = {
   error: null,
 };
 
+const DEFAULT_SWAP_FEE = 0.1;
+const DEFAULT_POOL_TYPE = PoolType.ComposableStable;
+const DEFAULT_AMPLIFICATION = 1;
+const DEFAULT_OWNER = ZERO_ADDRESS;
+const DEFAULT_OWNERSHIP_TYPE = OwnershipType.Fixed;
+const DEFAULT_TOKENS = [emptyToken, emptyToken];
+const DEFAULT_LIQUIDITY = [emptyTokenInput, emptyTokenInput];
+const DEFAULT_WEIGHTS = [500000000000000000n, 500000000000000000n];
+
 export default function CreatePageContent() {
   const router = useRouter();
   const { captureException, track } = useAnalytics();
@@ -82,22 +91,21 @@ export default function CreatePageContent() {
   const publicClient = usePublicClient();
 
   // States for Pool Creation and Initial Liquidity
-  const [poolCreateTokens, setpoolCreateTokens] = useState<Token[]>([
-    emptyToken,
-    emptyToken,
-  ]);
-  const [initialLiquidityTokens, setInitialLiquidityTokens] = useState<
-    TokenInputType[]
-  >([emptyTokenInput, emptyTokenInput]);
+  const [poolCreateTokens, setpoolCreateTokens] =
+    useState<Token[]>(DEFAULT_TOKENS);
+  const [initialLiquidityTokens, setInitialLiquidityTokens] =
+    useState<TokenInputType[]>(DEFAULT_LIQUIDITY);
 
-  const [poolType, setPoolType] = useState<PoolType>(PoolType.ComposableStable);
-  const [swapFee, setSwapFee] = useState<number>(0.1);
+  const [poolType, setPoolType] = useState<PoolType>(DEFAULT_POOL_TYPE);
+  const [swapFee, setSwapFee] = useState<number>(DEFAULT_SWAP_FEE);
   const [poolName, setPoolName] = useState<string>("");
   const [poolSymbol, setPoolSymbol] = useState<string>("");
-  const [amplification, setAmplification] = useState<number>(1); // NOTE: min is 1 max is 5000
-  const [owner, setOwner] = useState<string>(balancerDelegatedOwnershipAddress);
+  const [amplification, setAmplification] = useState<number>(
+    DEFAULT_AMPLIFICATION,
+  ); // NOTE: min is 1 max is 5000
+  const [owner, setOwner] = useState<string>(DEFAULT_OWNER);
   const [ownershipType, setOwnerShipType] = useState<OwnershipType>(
-    OwnershipType.Governance,
+    DEFAULT_OWNERSHIP_TYPE,
   );
   const [invalidAddressErrorMessage, setInvalidAddressErrorMessage] = useState<
     string | null
@@ -181,13 +189,14 @@ export default function CreatePageContent() {
 
   const {
     weights,
+    resetWeights,
     lockedWeights,
     weightsError,
     handleWeightChange,
     toggleLock,
     addWeight,
     removeWeight,
-  } = usePoolWeights([500000000000000000n, 500000000000000000n]);
+  } = usePoolWeights(DEFAULT_WEIGHTS);
 
   const handleAddToken = () => {
     if (poolCreateTokens.length < maxTokensLength) {
@@ -326,6 +335,7 @@ export default function CreatePageContent() {
     isLoading: isLoadingCreatePoolTx,
     isSubmitting: isSubmittingCreatePoolTx,
     isSuccess: isSuccessCreatePoolTx,
+    reset: resetCreatePoolTx,
   } = useTxn({
     message: `Create pool ${poolName}`,
     onSuccess: async (txHash) => {
@@ -345,12 +355,28 @@ export default function CreatePageContent() {
     },
   });
 
-  // Reset the error message if you close/reopen the preview
   useEffect(() => {
     if (!isPreviewOpen) {
+      // Reset create tx error message if you close/reopen the preview
       setCreatePoolErrorMessage("");
     }
-  }, [isPreviewOpen]);
+    if (!isPreviewOpen && isSuccessCreatePoolTx) {
+      // Reset the pool creation page state so you can create another pool without refreshing the page (if the tx was a success)
+      setpoolCreateTokens(DEFAULT_TOKENS);
+      setInitialLiquidityTokens(DEFAULT_LIQUIDITY);
+      setPoolType(DEFAULT_POOL_TYPE);
+      setSwapFee(DEFAULT_SWAP_FEE);
+      setPoolName("");
+      setPoolSymbol("");
+      setAmplification(DEFAULT_AMPLIFICATION);
+      setOwner(DEFAULT_OWNER);
+      setOwnerShipType(DEFAULT_OWNERSHIP_TYPE);
+      setInvalidAddressErrorMessage(null);
+      setPoolId("");
+      resetWeights(DEFAULT_WEIGHTS);
+      resetCreatePoolTx();
+    }
+  }, [isPreviewOpen, isSuccessCreatePoolTx]);
 
   // Determine if there are any liquidity mismatches in the pool (supply imbalances in terms of pool weights)
   const liquidityMismatchInfo = useLiquidityMismatch({

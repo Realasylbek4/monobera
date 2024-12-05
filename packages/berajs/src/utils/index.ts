@@ -12,3 +12,4 @@ export * from "./timeFrame";
 export * from "./formatNumber";
 export * from "./formatTimestamps";
 export * from "./tokenWrapping";
+export * from "./errorMessages";

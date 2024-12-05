@@ -451,9 +451,7 @@ export default function WithdrawLiquidityContent({
                 <Icons.tooltip className="mt-[-4px] inline h-4 w-4" /> Error
               </AlertTitle>
               <AlertDescription className="text-xs">
-                {error.balanceError
-                  ? `Balancer error ${error.balanceError}`
-                  : error.message}
+                {error.message}
               </AlertDescription>
             </Alert>
           )}

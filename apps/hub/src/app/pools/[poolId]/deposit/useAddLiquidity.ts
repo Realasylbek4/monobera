@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { getErrorMessage, tryMatchBalancerErrorCode } from "@bera/berajs";
 import { chainId, jsonRpcUrl } from "@bera/config";
 import {
   AddLiquidity,
@@ -19,7 +20,7 @@ export interface UseAddLiquidityArgs {
 
 export type AddLiquidityError = {
   error?: unknown;
-  balanceError?: `BAL#${string}`;
+  balanceError?: `BAL#${string}`; // NOTE: we drill these into the UI so we can display addLiquidity-specific messages there.
   message?: string;
 };
 
@@ -133,8 +134,8 @@ export const useAddLiquidity = ({ pool, wethIsEth }: UseAddLiquidityArgs) => {
         const e = error as ContractFunctionExecutionError;
         setError({
           error: e,
-          balanceError: e?.shortMessage?.split("\n").at(1) as `BAL#${string}`,
-          message: e.shortMessage,
+          balanceError: tryMatchBalancerErrorCode(e?.shortMessage),
+          message: getErrorMessage(e),
         });
       } else {
         setError({ message: String(error), error });

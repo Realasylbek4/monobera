@@ -10,6 +10,7 @@ import {
   Token,
   TransactionActionType,
   balancerVaultAbi,
+  getErrorMessage,
   useBeraJs,
   useBgtUnstakedBalance,
   usePollWalletBalances,
@@ -654,7 +655,7 @@ export function SwapCard({
                     <Alert variant="destructive">
                       <AlertTitle>Error</AlertTitle>
                       <AlertDescription className="text-xs">
-                        {`Swap query failed due to '${error}'`}
+                        {getErrorMessage(error)}
                       </AlertDescription>
                     </Alert>
                   )}

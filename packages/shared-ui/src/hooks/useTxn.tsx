@@ -66,6 +66,7 @@ interface UseTxnApi {
   isFundingSuccess: boolean;
   isFundingError: boolean;
   ModalPortal: ReactElement<any, any>;
+  reset: () => void;
 }
 
 const DURATION = 3000;
@@ -123,7 +124,7 @@ export const useTxn = ({
 
   const { captureException, track } = useAnalytics();
 
-  const { write, isLoading, isSubmitting, isSuccess, isError } =
+  const { write, isLoading, isSubmitting, isSuccess, isError, reset } =
     useBeraContractWrite({
       /**
        * Error callback function executed when a transaction encounters an error.
@@ -540,5 +541,6 @@ export const useTxn = ({
     isFundingSuccess,
     isFundingError,
     ModalPortal: memoizedModalPortal as ReactElement<any, any>,
+    reset,
   };
 };

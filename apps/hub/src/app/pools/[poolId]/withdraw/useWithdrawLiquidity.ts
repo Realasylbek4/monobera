@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useBeraJs } from "@bera/berajs";
+import {
+  getErrorMessage,
+  tryMatchBalancerErrorCode,
+  useBeraJs,
+} from "@bera/berajs";
 import { chainId, jsonRpcUrl } from "@bera/config";
 import {
   PoolState,
@@ -113,9 +117,9 @@ export const useRemoveLiquidity = ({ pool }: UseRemoveLiquidityArgs) => {
       ) {
         const e = error as ContractFunctionExecutionError;
         setError({
-          error: e,
-          balanceError: e?.shortMessage?.split("\n").at(1),
-          message: e.shortMessage,
+          error: error,
+          balanceError: tryMatchBalancerErrorCode(e?.shortMessage),
+          message: getErrorMessage(error),
         });
       } else {
         setError({ message: String(error), error });

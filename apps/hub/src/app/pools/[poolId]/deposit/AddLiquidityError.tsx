@@ -31,8 +31,6 @@ export default function AddLiquidityError({
             <br />
             Try to reduce the amount of tokens or use balanced mode.
           </span>
-        ) : error.balanceError ? (
-          `Balancer error ${error.balanceError}`
         ) : (
           error.message
         )}

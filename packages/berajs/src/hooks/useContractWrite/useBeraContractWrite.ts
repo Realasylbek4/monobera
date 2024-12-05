@@ -32,6 +32,11 @@ const useBeraContractWrite = ({
     address: account,
   });
 
+  // Reset the state of the hook to the initial state
+  const reset = useCallback(() => {
+    dispatch({ type: ActionEnum.RESET });
+  }, []);
+
   const write = useCallback(
     async ({
       address,
@@ -130,6 +135,7 @@ const useBeraContractWrite = ({
       onLoading,
       onSubmission,
       refresh,
+      reset,
     ],
   );
 
@@ -139,6 +145,7 @@ const useBeraContractWrite = ({
     isSuccess: state.confirmState === "success",
     isError: state.confirmState === "fail",
     write,
+    reset,
   };
 };
 

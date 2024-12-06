@@ -5,34 +5,31 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Address } from "viem";
-import { CuttingBoardConfiguration } from "./cutting-board-configuration";
+import { QueuedRewardAllocationConfiguration } from "./queued-reward-allocation-configuration";
+import { RewardAllocationConfiguration } from "./reward-allocation-configuration";
 
 export const ValidatorConfiguration = ({
-  validatorAddress,
+  validatorPublicKey,
 }: {
-  validatorAddress: Address;
+  validatorPublicKey: Address;
 }) => {
   const [operatorAddress, setOperatorAddress] = useState<string>("");
-  const [commission, setCommission] = useState<string>("0");
 
   const handleSaveSettings = useCallback(() => {
-    console.log("changing settings", validatorAddress);
+    console.log("changing settings", validatorPublicKey);
   }, []);
 
   const handleUpdateMetadata = useCallback(() => {
-    console.log("updating metadata", validatorAddress);
+    console.log("updating metadata", validatorPublicKey);
   }, []);
 
   return (
     <div className="mt-10 flex flex-col gap-6">
-      <Card className="flex flex-col gap-1 p-4">
-        <span className="text-2xl font-bold">Berachef Weight</span>
-        <span className="text-sm text-muted-foreground">
-          Configure your reward vaults distribution weighting
-        </span>
-        <CuttingBoardConfiguration />
-      </Card>
-      <Card className="flex flex-col gap-1 p-4">
+      <QueuedRewardAllocationConfiguration
+        validatorPublicKey={validatorPublicKey}
+      />
+      <RewardAllocationConfiguration validatorPublicKey={validatorPublicKey} />
+      {/* <Card className="flex flex-col gap-1 p-4">
         <span className="text-2xl font-bold">General Settings</span>
         <span className="text-sm text-muted-foreground">
           Configure your operator address & commission
@@ -44,13 +41,7 @@ export const ValidatorConfiguration = ({
           value={operatorAddress}
           onChange={(e) => setOperatorAddress(e.target.value)}
         />
-        <span className="mt-2 flex font-semibold">Commission</span>
-        <Input
-          type="input"
-          className="w-[300px]"
-          value={commission}
-          onChange={(e) => setCommission(e.target.value)}
-        />
+
         <div className="my-4 border-b border-border" />
         <Button
           className="flex w-[100px] self-end border border-border p-2"
@@ -59,14 +50,14 @@ export const ValidatorConfiguration = ({
         >
           {"Save"}
         </Button>
-      </Card>
+      </Card> */}
       <Card className="flex flex-col gap-1 p-4">
         <span className="text-2xl font-bold">Update your metadata</span>
         <span className="text-sm text-muted-foreground">
           Configure and modify your validator metadata
         </span>
         <div
-          className="mt-2 flex cursor-pointer items-center text-xl font-bold"
+          className="mt-2 flex cursor-pointer items-center text-xl font-bold mb-1"
           onClick={handleUpdateMetadata}
         >
           {"Coming Soon"}

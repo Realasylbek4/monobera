@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { useBeraJs, type Validator } from "@bera/berajs";
+import {
+  useBeraJs,
+  type Validator,
+  usePollSelectedValidator,
+} from "@bera/berajs";
 import {
   Select,
   SelectContent,
@@ -17,8 +21,10 @@ import { ValidatorEvents } from "./validator-events";
 
 export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
   const { account } = useBeraJs();
+  const { data } = usePollSelectedValidator(account ?? "0x");
   const isValidatorWallet =
-    account?.toLowerCase() === validator.operator.toLowerCase();
+    data?.validators[0]?.publicKey === validator.coinbase;
+
   const [dayRange, setDayRange] = useState("30");
 
   return (
@@ -26,10 +32,9 @@ export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
       <div className="mb-6 flex w-full flex-col justify-between gap-6 sm:flex-row">
         <TabsList variant="ghost">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          {/* TODO: Uncomment this when we have a working contract for configuration */}
-          {/* {isValidatorWallet && (
+          {isValidatorWallet && (
             <TabsTrigger value="configuration">Configuration</TabsTrigger>
-          )} */}
+          )}
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           {/* <TabsTrigger value="events">Events</TabsTrigger> */}
         </TabsList>
@@ -67,7 +72,9 @@ export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
         <ValidatorPolData validator={validator} />
       </TabsContent>
       <TabsContent value="configuration">
-        <ValidatorConfiguration validatorAddress={validator.coinbase} />
+        <ValidatorConfiguration
+          validatorPublicKey={data?.validators[0]?.publicKey ?? "0x"}
+        />
       </TabsContent>
       <TabsContent value="analytics">
         <ValidatorAnalytics

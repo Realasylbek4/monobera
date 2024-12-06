@@ -51,4 +51,5 @@ export enum TransactionActionType {
 
   // POL
   CREATE_REWARDS_VAULT = "Create Reward Vault",
+  APPLYING_REWARD_ALLOCATION = "Applying Reward Allocation",
 }

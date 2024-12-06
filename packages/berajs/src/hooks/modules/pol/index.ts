@@ -14,3 +14,8 @@ export * from "./hooks/useRewardVaultBalanceFromStakingToken";
 export { useRewardVaultFromToken } from "./hooks/useRewardVaultFromToken";
 export { usePollRewardVault } from "./hooks/poll-reward-vault";
 export { useSubgraphUserValidators } from "./hooks/useSubgraphUserValidators";
+export { usePollValidatorRewardAllocation } from "./hooks/poll-validator-reward-allocation";
+export { usePollRewardAllocationBlockDelay } from "./hooks/poll-reward-allocation-block-delay";
+export { usePollDefaultRewardAllocation } from "./hooks/poll-default-reward-allocation";
+export { usePollValidatorQueuedRewardAllocation } from "./hooks/poll-validator-queued-reward-allocation";
+export { usePollSelectedValidator } from "./hooks/poll-selected-validator";

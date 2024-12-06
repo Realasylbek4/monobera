@@ -219,3 +219,9 @@ query GetRewardVault($stakingToken: String) {
     ...VaultWithStakingToken
   }
 }
+
+query GetSelectedValidator($operator: Bytes = "") {
+  validators(where: {operator: $operator}) {
+    publicKey
+  }
+}

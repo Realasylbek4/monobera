@@ -1,119 +1,110 @@
-<br>
-
 <p align="center">
   <a href="https://wagmi.sh">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://res.cloudinary.com/duv0g402y/image/upload/v1713381289/monobera_color_alt_fgny7b.svg">
-      <img alt="wagmi logo" src="https://res.cloudinary.com/duv0g402y/image/upload/v1713381289/monobera_color_alt2_ppo8o6.svg" width="auto" height="200">
+      <img alt="Wagmi Logo" src="https://res.cloudinary.com/duv0g402y/image/upload/v1713381289/monobera_color_alt2_ppo8o6.svg" height="200">
     </picture>
   </a>
 </p>
+
+<h2 align="center">Monorepo for Managing Berachain Applications & Libraries</h2>
+
 <p align="center">
-    Monorepo for maintaining Berachain Applications & Libraries
-<p>
+  A comprehensive and structured codebase for Berachain's applications and libraries.
+</p>
 
-![CI](https://github.com/berachain/monobera/actions/workflows/quality.yml/badge.svg?branch=v2)
+<div align="center">
+  <a href="https://github.com/berachain/monobera/actions/workflows/quality.yml">
+    <img src="https://github.com/berachain/monobera/actions/workflows/quality.yml/badge.svg?branch=v2" alt="CI Status">
+  </a>
+</div>
 
-## Installation
+---
 
-In order to setup your local environment, run
+## 🚀 Installation
 
-```
-git submodule init
-git submodule update
-pnpm i
-pnpm setenv bartio
-```
+### Prerequisites
+Ensure the following are installed:
+- **Node.js**: v18.18.2 or higher.
+- **pnpm**: Latest version. Install via `npm install -g pnpm`.
 
-You'll also need to run
+### Steps
+1. Clone the repository and initialize submodules:
+   ```bash
+   git submodule init
+   git submodule update
+   pnpm i
+   pnpm setenv bartio
 
-```
 cp .env.local.example .env.local
-```
+Create your own NEXT_PUBLIC_DYNAMIC_API_KEY (without CORS restrictions) and add it to .env.local.
 
-After that, create your own `NEXT_PUBLIC_DYNAMIC_API_KEY` without any CORS restrictions to write into `.env.local`.
+📂 Environment Variables
+Berachain applications are single-chain applications. Use the following environment configuration for the Bartio testnet:
 
+Environment Variables	Description
+.env.bartio	Configuration for Berachain Bartio testnet
 
-All Berachain dapps are built to be single chain applications.
+🛠️ Commands
+Script	Description
+pnpm i	Installs packages for all apps and libraries.
+pnpm build	Builds all packages and apps (memory-intensive).
+pnpm setenv <env>	Copies .env.<environment> into .env. Avoid manual edits.
+pnpm dev:<app>	Runs the specified app in development mode (e.g., pnpm dev:hub).
+pnpm clean	Cleans the project with turbo clean and removes node_modules.
+pnpm check-types	Runs type-checking across all apps and libraries.
+pnpm lint	Lints all apps and libraries.
+pnpm format	Formats the codebase and writes changes.
+pnpm check	Performs a full check, including linting and type-checking.
+pnpm prepare	Installs Husky for Git hooks.
+pnpm upsertenv	Updates environment variables in Vercel. Requires login.
 
-| Environment Variables | Environment |
-| --------------------- | ---------------------------------------------------------------------------------------------- |
-| `.env.bartio` | Environment variables for Berachain bartio testnet |
+🧩 Applications
+App	Description
+app/hub	Code for the Hub application.
+app/honey	Code for the Honey application.
+app/lend	Code for the Bend application.
+app/perp	Code for the Berps application.
 
+📦 Packages
+Package	Description
+packages/berajs	A TypeScript library for interacting with Berachain. Docs
+packages/wagmi	Shared configuration for wagmi/dynamic web3 applications.
+packages/config	Centralized storage for shared configuration variables.
+packages/graphql	GraphQL clients and subgraph queries for Apollo.
+packages/proto	Protobuf and e2e typing for Cosmos-SDK integration.
+packages/shared-ui	Reusable UI components built on top of the packages/ui.
+packages/ui	UI components based on ShadCN.
 
-## Commands
+🛠️ Tooling & Libraries
+This monorepo leverages cutting-edge tools for development efficiency:
 
-Monobera requires node 18.18.2+.
+Biome.js
+Knip
+Turborepo
+Next.js
+Wagmi
+Viem
+SWR
+Vocs
+ShadCN
+Tailwind CSS
+📊 CI/CD
+The CI pipeline uses caching for turbo builds via rharkor/caching-for-turbo@v1.5. This significantly reduces build times for incremental updates.
 
-| Script                   | Description                                                                                              |
-| ------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `pnpm i`                 | Installs packages for all apps & packages                                                                |
-| `pnpm build`             | Builds all packages and apps. Not recommended as it takes large amounts of memory                        |
-| `pnpm setenv <environment>`     | Copies `.env.<environment>` into `.env`. Don't do it manually.                                                  |
-| `pnpm build:hub`         | Builds only the `Hub` and related packages.                                                              |
-| `pnpm build:honey`       | Builds only the `Honey` and related packages.                                                            |
-| `pnpm build:lend`        | Builds only the `Bend` and related packages.                                                             |
-| `pnpm build:perp`        | Builds only the `Berps` and related packages.                                                            |
-| `pnpm build:berajs-docs` | Builds only the `Berajs Docs` and related packages.                                                      |
-| `pnpm build:pkg`         | Builds all packages.                                                                                     |
-| `pnpm dev:pkg`           | Runs all packages in dev mode.                                                                           |
-| `pnpm clean`             | Cleans the project using turbo clean and removes untracked files with git clean, including node_modules. |
-| `pnpm pullenv`           | Pulls production environment variables from Vercel. Requires Vercel Login                                |
-| `pnpm check-types`       | Runs type-checking across all apps and packages.                                                         |
-| `pnpm lint`              | Lints all apps and packages.                                                                             |
-| `pnpm format:check`      | Checks the formatting of all apps and packages without making changes.                                   |
-| `pnpm format`            | Formats the apps and packages and writes the changes.                                                    |
-| `pnpm check`             | Performs a comprehensive check of all apps and packages, including linting and type-checking.            |
-| `pnpm prepare`           | Installs Husky, setting up Git hooks for the project.                                                    |
-| `pnpm upsertenv`         | Runs a script to upsert environment variables in Vercel for the project.                                 |
-| `pnpm knip`              | Executes the knip command to exclude binaries from operations.                                           |
+📢 Banner Management for Dapps
+Banners are crucial for displaying urgent or event-related messages to users.
 
-To run Hub for example, run `pnpm i && pnpm dev:hub`
+Global Notifications: Centralized in packages/shared-ui under BannerConfig.
+Targeted Pages: Specify hrefs to target pages (e.g., ["/pools", "/swap", "/"] for BEX).
+To enable/disable banners, submit a PR modifying the enabled field in BannerConfig.
 
-## Apps
+🎯 Example Usage
+To run a specific app (e.g., Hub), use the following command:
+bash
+pnpm i && pnpm dev:hub
 
-| App                  | Description                                    |
-| -------------------- | ---------------------------------------------- |
-| `app/hub`            | `Hub` application code                         |
-| `app/honey`          | `Honey` application code                       |
-| `app/lend`           | `Bend` application code                        |
-| `app/perp`           | `Berps` application code                       |
-
-## Packages
-
-| Package                 | Description                                                                                               |
-| ----------------------- | --------------------------------------------------------------------------------------------------------- |
-| `packages/berajs`       | A Typescript package for interacting with Berachain. [View Docs](https://berajsdocs.vercel.app/)          |
-| `packages/wagmi`        | A package to create a shared wagmi / dynamic config for web3 applications                                 |
-| `packages/config`       | A package to store shared config variables across applications                                            |
-| `packages/graphql`      | A package to store appolo clients / gql subgraph queries                                                  |
-| `packages/proto`        | A package to generate e2e typing & protobuf for interacting with Cosmos-SDK                               |
-| `packages/shared-ui`    | A package of built UI widgets made from `packages/ui` component                                           |
-| `packages/ui`           | A package of [shadcn](https://ui.shadcn.com/) components                                                  |
-
-
-
-## Tooling & Libraries
-
-A short list of tooling and libraries we use across all apps and packages.
-
-- [biomejs](https://biomejs.dev/)
-- [knip](https://knip.dev/)
-- [turbo](https://turbo.build/)
-- [next](https://nextjs.org/)
-- [wagmi](https://wagmi.sh/)
-- [viem](https://viem.sh/)
-- [swr](https://swr.vercel.app/)
-- [vocs](https://vocs.dev/)
-- [shadcn](https://ui.shadcn.com/)
-- [tailwind](https://tailwindcss.com/)
-
-## CI
-
-We have set up a caching mechanism for turbo builds to speed up CI times. This is done by using an open source github action called [rharkor/caching-for-turbo@v1.5](https://github.com/rharkor/caching-for-turbo).
-
-## Dapps banner management
-
-Banners serve as an essential tool for communicating urgent messages or event-related information to users across the site. The management of these banners is centralized in the Bannerconfig component, located within the `packages/shared-ui` directory. This allows for effective global notification during scenarios like RPC issues or network congestion.
-For targeted communications, banners can be configured to appear on specific pages by listing the desired paths in the hrefs field. For example, to display a banner only on the "Pools," "Swap," and homepage in BEX, you would set `hrefs` to `["/pools", "/swap", "/"]`.
-To modify the banner configuration, submit a PR with changes to the `enabled` field in the `bannerConfig`. This will update the banner's active status and display it as specified.
+💡 Tips for Contribution
+Follow the contribution guidelines.
+Ensure all PRs pass linting and CI checks.
+Use meaningful commit messages.
